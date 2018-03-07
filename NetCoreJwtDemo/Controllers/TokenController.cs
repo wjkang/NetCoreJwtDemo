@@ -37,7 +37,8 @@ namespace NetCoreJwtDemo.Controllers
         private string GenerateToken(string username)
         {
             var claims = new Claim[] {
-                new Claim(ClaimTypes.Name,username)
+                new Claim(ClaimTypes.Name,username),
+                new Claim("UserId","1")
             };
             var now = DateTime.UtcNow;
             var tokenAuthConfig = GetTokenAuthConfiguration();

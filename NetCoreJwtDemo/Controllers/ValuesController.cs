@@ -15,6 +15,7 @@ namespace NetCoreJwtDemo.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            var claims = HttpContext.User.Claims;
             return new string[] { "value1", "value2" };
         }
 
