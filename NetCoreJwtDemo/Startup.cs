@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace NetCoreJwtDemo
 {
@@ -20,6 +22,19 @@ namespace NetCoreJwtDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //添加redis
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost";
+
+            });
+
+            //添加session
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10); //session活期时间
+                options.Cookie.HttpOnly = true;//设为httponly
+            });
             services.AddSingleton(_appConfiguration);
             services.AddMvc();
             services.AddAuthentication(options => {
@@ -78,6 +93,7 @@ namespace NetCoreJwtDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSession();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -85,6 +101,7 @@ namespace NetCoreJwtDemo
             app.UseAuthentication();
             //app.UseJwtTokenMiddleware();
             app.UseMvc();
+           
         }
     }
 }

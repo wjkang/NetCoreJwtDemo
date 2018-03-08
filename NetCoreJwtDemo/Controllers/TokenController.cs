@@ -26,11 +26,12 @@ namespace NetCoreJwtDemo.Controllers
         [HttpPost]
         public IActionResult Create(string username, string password)
         {
+            HttpContext.Session.SetString("name", "121212");
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 return new ObjectResult(GenerateToken(username));
             }
-
+            
             return BadRequest();
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace NetCoreJwtDemo.Controllers
 {
@@ -16,7 +17,8 @@ namespace NetCoreJwtDemo.Controllers
         public IEnumerable<string> Get()
         {
             var claims = HttpContext.User.Claims;
-            return new string[] { "value1", "value2" };
+            var name = HttpContext.Session.GetString("name");
+            return new string[] { "value1", "1212" };
         }
 
         // GET api/values/5
