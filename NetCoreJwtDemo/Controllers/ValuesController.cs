@@ -5,20 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using NetCoreJwtDemo.Cache;
 
 namespace NetCoreJwtDemo.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private ICache _cache;
+
+        public ValuesController(ICache cache)
+        {
+            _cache = cache;
+        }
         // GET api/values
         [Authorize]
         [HttpGet]
         public IEnumerable<string> Get()
         {
             var claims = HttpContext.User.Claims;
-            var name = HttpContext.Session.GetString("name");
-            return new string[] { "value1", "1212" };
+            var token = _cache.Get<string>("UserToken:" + 1);
+            return new string[] {token };
         }
 
         // GET api/values/5

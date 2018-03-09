@@ -22,18 +22,12 @@ namespace NetCoreJwtDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //添加redis
-            services.AddDistributedRedisCache(options =>
+            //添加redis缓存
+            services.AddRedisCache(options =>
             {
                 options.Configuration = "localhost";
+                options.InstanceName = "NetCoreJwtDemo";
 
-            });
-
-            //添加session
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(10); //session活期时间
-                options.Cookie.HttpOnly = true;//设为httponly
             });
             services.AddSingleton(_appConfiguration);
             services.AddMvc();
@@ -93,7 +87,7 @@ namespace NetCoreJwtDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseSession();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

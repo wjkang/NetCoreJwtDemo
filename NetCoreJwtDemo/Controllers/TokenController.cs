@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using NetCoreJwtDemo.Cache;
 
 namespace NetCoreJwtDemo.Controllers
 {
@@ -16,17 +17,19 @@ namespace NetCoreJwtDemo.Controllers
     public class TokenController : Controller
     {
         private IConfigurationRoot _appConfiguration;
+        private ICache _cache;
 
-        public TokenController(IConfigurationRoot configurationRoot)
+        public TokenController(IConfigurationRoot configurationRoot,ICache cache)
         {
             _appConfiguration = configurationRoot;
+            _cache = cache;
         }
 
         [Route("create")]
         [HttpPost]
         public IActionResult Create(string username, string password)
         {
-            HttpContext.Session.SetString("name", "121212");
+            
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 return new ObjectResult(GenerateToken(username));
@@ -51,8 +54,9 @@ namespace NetCoreJwtDemo.Controllers
                 expires: now.Add(tokenAuthConfig.Expiration),
                 signingCredentials: tokenAuthConfig.SigningCredentials
             );
-
-            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            var token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            _cache.Insert("UserToken:"+1, token);
+            return token;
         }
         private TokenAuthConfiguration GetTokenAuthConfiguration()
         {
