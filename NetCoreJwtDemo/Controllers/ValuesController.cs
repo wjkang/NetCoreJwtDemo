@@ -23,9 +23,9 @@ namespace NetCoreJwtDemo.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var claims = HttpContext.User.Claims;
-            var token = _cache.Get<string>("UserToken:" + 1);
-            return new string[] {token };
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+            var existToken = _cache.Get<string>("UserToken:" + token.Replace("Bearer ", ""));
+            return new string[] {existToken };
         }
 
         // GET api/values/5

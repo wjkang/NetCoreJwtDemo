@@ -100,7 +100,7 @@ namespace NetCoreJwtDemo.Cache
         public void Insert<T>(string key, T data)
         {
             Connect();
-            var jsonData = GetJsonData<T>(data, TimeOut, false);
+            var jsonData = GetJsonData<T>(data, -1, false);
             _cache.StringSet(GetKeyForRedis(key), jsonData);
         }
 
@@ -108,7 +108,7 @@ namespace NetCoreJwtDemo.Cache
         {
             Connect();
             var timeSpan = TimeSpan.FromSeconds(cacheTime);
-            var jsonData = GetJsonData(data, TimeOut, true);
+            var jsonData = GetJsonData(data, cacheTime, true);
             _cache.StringSet(GetKeyForRedis(key), jsonData, timeSpan);
         }
 
@@ -116,7 +116,7 @@ namespace NetCoreJwtDemo.Cache
         {
             Connect();
             var timeSpan = TimeSpan.FromSeconds(cacheTime);
-            var jsonData = GetJsonData<T>(data, TimeOut, true);
+            var jsonData = GetJsonData<T>(data, cacheTime, true);
             _cache.StringSet(GetKeyForRedis(key), jsonData, timeSpan);
         }
 
@@ -124,7 +124,7 @@ namespace NetCoreJwtDemo.Cache
         {
             Connect();
             var timeSpan = cacheTime - DateTime.Now;
-            var jsonData = GetJsonData(data, TimeOut, true);
+            var jsonData = GetJsonData(data,(int)timeSpan.TotalSeconds, true);
             _cache.StringSet(GetKeyForRedis(key), jsonData, timeSpan);
         }
 
@@ -132,7 +132,7 @@ namespace NetCoreJwtDemo.Cache
         {
             Connect();
             var timeSpan = cacheTime - DateTime.Now;
-            var jsonData = GetJsonData<T>(data, TimeOut, true);
+            var jsonData = GetJsonData<T>(data, (int)timeSpan.TotalSeconds, true);
             _cache.StringSet(GetKeyForRedis(key), jsonData, timeSpan);
         }
 

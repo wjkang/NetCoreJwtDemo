@@ -55,7 +55,7 @@ namespace NetCoreJwtDemo.Controllers
                 signingCredentials: tokenAuthConfig.SigningCredentials
             );
             var token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            _cache.Insert("UserToken:"+1, token);
+            _cache.Insert("UserToken:"+token, 1,60*5);
             return token;
         }
         private TokenAuthConfiguration GetTokenAuthConfiguration()
