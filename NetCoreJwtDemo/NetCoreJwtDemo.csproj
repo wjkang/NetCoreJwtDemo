@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Session\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
