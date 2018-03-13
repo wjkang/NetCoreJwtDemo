@@ -95,16 +95,31 @@ namespace NetCoreJwtDemo.Remoting
 
             //scopeAccessor.GetValue(ContextKey).ShouldBeNull();
 
+            //1.DataContext根据ContextKey取出数据为空
+            //2.ScopeDictionary添加ScopeItem（value 为42，Outer为null),Key为ScopeItem的Id
+            //3.DataContext添加key为ContextKey，value为ScopeItem的Id的项
             using (scopeAccessor.BeginScope(ContextKey, new TestData(42)))
             {
-                //scopeAccessor.GetValue(ContextKey).Number.ShouldBe(42);
+                //1.DataContext根据ContextKey取出ScopeItem的Id
+                //2.ScopeDictionary根据key取出ScopeItem,返回ScopeItem.value
+                var value =scopeAccessor.GetValue(ContextKey);//42
 
+                //1.DataContext根据ContextKey取出外层ScopeItem
+                //2.ScopeDictionary添加ScopeItem（value 为42，Outer为外层ScopeItem),Key为ScopeItem的Id
+                //3.DataContext添加key为ContextKey，value为新ScopeItem的Id的项
                 using (scopeAccessor.BeginScope(ContextKey, new TestData(24)))
                 {
-                    //scopeAccessor.GetValue(ContextKey).Number.ShouldBe(24);
+                    //1.DataContext根据ContextKey取出当前域的ScopeItem的Id
+                    //2.ScopeDictionary根据key取出当前域ScopeItem,返回当前域ScopeItem.value
+                    var value1 =scopeAccessor.GetValue(ContextKey);//24
                 }
+                //1.调用dispose
+                //2.ScopeDictionary移除当前域ScopeItem
+                //3.如果存在上层域，DataContext设置key为ContextKey的value为当前域ScopeItem的outer.Id
 
-                //scopeAccessor.GetValue(ContextKey).Number.ShouldBe(42);
+
+
+                var value2 =scopeAccessor.GetValue(ContextKey);//42
             }
 
             //scopeAccessor.GetValue(ContextKey).ShouldBeNull();
