@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
@@ -32,39 +30,7 @@ namespace NetCoreJwtDemo
 
             });
             services.AddSingleton(_appConfiguration);
-
-
-
             services.AddMvc().AddControllersAsServices();
-            //services.AddAuthentication(options => {
-            //    options.DefaultAuthenticateScheme = "JwtBearer";
-            //    options.DefaultChallengeScheme = "JwtBearer";
-            //    }).AddJwtBearer("JwtBearer", options =>
-            //        {
-            //            options.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
-
-            //            options.TokenValidationParameters = new TokenValidationParameters
-            //            {
-            //                // The signing key must match!
-            //                ValidateIssuerSigningKey = true,
-            //                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"])),
-
-            //                // Validate the JWT Issuer (iss) claim
-            //                ValidateIssuer = true,
-            //                ValidIssuer = _appConfiguration["Authentication:JwtBearer:Issuer"],
-
-            //                // Validate the JWT Audience (aud) claim
-            //                ValidateAudience = true,
-            //                ValidAudience = _appConfiguration["Authentication:JwtBearer:Audience"],
-
-            //                // Validate the token expiry
-            //                ValidateLifetime = true,
-
-            //                // If you want to allow a certain amount of clock drift, set that here
-            //                ClockSkew = TimeSpan.Zero
-            //            };
-
-            //        });
             services.AddAuthentication(options =>
                     {
                         options.DefaultAuthenticateScheme = "JwtBearer";
