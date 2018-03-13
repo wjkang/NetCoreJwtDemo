@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 namespace NetCoreJwtDemo
 {
@@ -20,7 +22,7 @@ namespace NetCoreJwtDemo
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //添加redis缓存
             services.AddRedisCache(options =>
@@ -30,7 +32,10 @@ namespace NetCoreJwtDemo
 
             });
             services.AddSingleton(_appConfiguration);
-            services.AddMvc();
+
+
+
+            services.AddMvc().AddControllersAsServices();
             //services.AddAuthentication(options => {
             //    options.DefaultAuthenticateScheme = "JwtBearer";
             //    options.DefaultChallengeScheme = "JwtBearer";
@@ -82,6 +87,13 @@ namespace NetCoreJwtDemo
                             ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
                         };
                     });
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(services);
+
+
+            var container = containerBuilder.Build();
+            return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,5 +109,7 @@ namespace NetCoreJwtDemo
             app.UseMvc();
            
         }
+
+
     }
 }
