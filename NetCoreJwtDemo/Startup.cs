@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace NetCoreJwtDemo
 {
@@ -92,7 +90,8 @@ namespace NetCoreJwtDemo
             {
                 app.UseDeveloperExceptionPage();
             }
-            //app.UseAuthentication();
+            //app.UseAuthentication();//app.UseMiddleware<AuthenticationMiddleware>();
+
             app.UseJwtTokenMiddleware();
             app.UseMvc();
            
