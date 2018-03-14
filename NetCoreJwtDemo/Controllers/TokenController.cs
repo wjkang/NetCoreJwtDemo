@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using NetCoreJwtDemo.Cache;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NetCoreJwtDemo.Controllers
 {
@@ -36,6 +37,17 @@ namespace NetCoreJwtDemo.Controllers
             }
             
             return BadRequest();
+        }
+
+        [Authorize]
+        [Route("Logout")]
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+            token = token.Replace("Bearer ", "");
+            _cache.Remove("UserToken:" + token);
+            return new OkObjectResult("Logout Successs");
         }
 
 
