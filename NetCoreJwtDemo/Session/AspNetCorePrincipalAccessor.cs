@@ -21,6 +21,7 @@ namespace NetCoreJwtDemo.Session
 
         public AspNetCorePrincipalAccessor(IHttpContextAccessor httpContextAccessor)
         {
+            //不管AspNetCorePrincipalAccessor是不是单例，httpContextAccessor都是单例的
             _httpContextAccessor = httpContextAccessor;
             Console.WriteLine("PrincipalAccessor:" + this.GetHashCode().ToString());
         }

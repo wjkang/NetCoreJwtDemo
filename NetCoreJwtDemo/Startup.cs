@@ -58,7 +58,7 @@ namespace NetCoreJwtDemo
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
-            containerBuilder.RegisterType<AspNetCorePrincipalAccessor>().As<IPrincipalAccessor>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<AspNetCorePrincipalAccessor>().As<IPrincipalAccessor>().SingleInstance();
             containerBuilder.RegisterType<ClaimsAbpSession>().As<IAbpSession>().SingleInstance();
             containerBuilder.RegisterType<ValuesController>().PropertiesAutowired();
 
