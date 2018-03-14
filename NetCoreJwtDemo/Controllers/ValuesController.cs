@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using NetCoreJwtDemo.Cache;
+using NetCoreJwtDemo.Session;
 
 namespace NetCoreJwtDemo.Controllers
 {
@@ -14,9 +15,12 @@ namespace NetCoreJwtDemo.Controllers
     {
         private ICache _cache;
 
+        public IAbpSession session { get; set; }
+
         public ValuesController(ICache cache)
         {
             _cache = cache;
+            session = NullAbpSession.Instance;
         }
         // GET api/values
         [Authorize]
@@ -25,7 +29,7 @@ namespace NetCoreJwtDemo.Controllers
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString();
             var existToken = _cache.Get<string>("UserToken:" + token.Replace("Bearer ", ""));
-            return new string[] {existToken };  
+            return new string[] {existToken,session.UserName};  
         }
 
         // GET api/values/5

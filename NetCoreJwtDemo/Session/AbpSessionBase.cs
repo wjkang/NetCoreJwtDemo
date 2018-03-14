@@ -9,7 +9,9 @@ namespace NetCoreJwtDemo.Session
     {
         public abstract long? UserId { get; }
 
-        public IDisposable Use(int? tenantId, long? userId)
+        public abstract string UserName { get; }
+
+        public IDisposable Use(long? userId)
         {
             throw new NotImplementedException();
         }

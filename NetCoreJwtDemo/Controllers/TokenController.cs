@@ -42,7 +42,7 @@ namespace NetCoreJwtDemo.Controllers
         {
             var claims = new Claim[] {
                 new Claim(ClaimTypes.Name,username),
-                new Claim("UserId","1")
+                new Claim(ClaimTypes.NameIdentifier,"1")
             };
             var now = DateTime.UtcNow;
             var tokenAuthConfig = GetTokenAuthConfiguration();

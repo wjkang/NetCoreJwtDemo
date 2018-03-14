@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using NetCoreJwtDemo.Controllers;
+using NetCoreJwtDemo.Session;
 
 namespace NetCoreJwtDemo
 {
@@ -56,7 +58,9 @@ namespace NetCoreJwtDemo
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
-
+            containerBuilder.RegisterType<AspNetCorePrincipalAccessor>().As<IPrincipalAccessor>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ClaimsAbpSession>().As<IAbpSession>().SingleInstance();
+            containerBuilder.RegisterType<ValuesController>().PropertiesAutowired();
 
             var container = containerBuilder.Build();
             return new AutofacServiceProvider(container);

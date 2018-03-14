@@ -9,6 +9,8 @@ namespace NetCoreJwtDemo.Session
     {
         long? UserId { get; }
 
-        IDisposable Use(int? tenantId, long? userId);
+        string UserName { get;}
+
+        IDisposable Use(long? userId);
     }
 }

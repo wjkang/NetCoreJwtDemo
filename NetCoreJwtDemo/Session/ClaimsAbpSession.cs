@@ -8,6 +8,13 @@ namespace NetCoreJwtDemo.Session
     public class ClaimsAbpSession : AbpSessionBase
     {
         protected IPrincipalAccessor PrincipalAccessor { get; }
+
+        public ClaimsAbpSession(IPrincipalAccessor principalAccessor)
+        {
+            PrincipalAccessor = principalAccessor;
+            Console.WriteLine("Session:" + this.GetHashCode().ToString());
+        }
+
         public override long? UserId
         {
             get
@@ -25,6 +32,19 @@ namespace NetCoreJwtDemo.Session
                 }
 
                 return userId;
+            }
+        }
+
+        public override string UserName
+        {
+            get
+            {
+                var userNameClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.UserName);
+                if (string.IsNullOrEmpty(userNameClaim?.Value))
+                {
+                    return null;
+                }
+                 return userNameClaim.Value;
             }
         }
     }

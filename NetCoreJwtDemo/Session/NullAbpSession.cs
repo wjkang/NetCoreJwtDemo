@@ -10,5 +10,7 @@ namespace NetCoreJwtDemo.Session
         public static NullAbpSession Instance { get; } = new NullAbpSession();
 
         public override long? UserId => null;
+
+        public override string UserName => null;
     }
 }
