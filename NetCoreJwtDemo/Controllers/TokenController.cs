@@ -38,6 +38,8 @@ namespace NetCoreJwtDemo.Controllers
             return BadRequest();
         }
 
+
+
         private string GenerateToken(string username)
         {
             var claims = new Claim[] {
@@ -55,7 +57,7 @@ namespace NetCoreJwtDemo.Controllers
                 signingCredentials: tokenAuthConfig.SigningCredentials
             );
             var token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            _cache.Insert("UserToken:"+token, 1,60*5);
+            _cache.Insert("UserToken:"+token, username,(int)tokenAuthConfig.Expiration.TotalSeconds);
             return token;
         }
         private TokenAuthConfiguration GetTokenAuthConfiguration()
@@ -65,7 +67,7 @@ namespace NetCoreJwtDemo.Controllers
             tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
             tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
             tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
-            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
+            tokenAuthConfig.Expiration = TimeSpan.FromDays(30);
             return tokenAuthConfig;
         }
     }
