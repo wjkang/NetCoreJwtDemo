@@ -32,6 +32,18 @@ namespace NetCoreJwtDemo
 
             });
             services.AddSingleton(_appConfiguration);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("NetCoreJwtDemo", builder =>
+                {
+                    //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
+                    builder
+                        //.WithOrigins(_appConfiguration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray())
+                        .AllowAnyOrigin() //TODO: Will be replaced by above when Microsoft releases microsoft.aspnetcore.cors 2.0 - https://github.com/aspnet/CORS/pull/94
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
             services.AddMvc().AddControllersAsServices();
             services.AddAuthentication(options =>
                     {
@@ -60,7 +72,6 @@ namespace NetCoreJwtDemo
             containerBuilder.Populate(services);
             containerBuilder.RegisterType<AspNetCorePrincipalAccessor>().As<IPrincipalAccessor>().SingleInstance();
             containerBuilder.RegisterType<ClaimsAbpSession>().As<IAbpSession>().SingleInstance();
-            containerBuilder.RegisterType<ValuesController>().PropertiesAutowired();
 
             var container = containerBuilder.Build();
             return new AutofacServiceProvider(container);
@@ -75,6 +86,7 @@ namespace NetCoreJwtDemo
                 app.UseDeveloperExceptionPage();
             }
             //app.UseAuthentication();
+            app.UseCors("NetCoreJwtDemo");
             app.UseJwtTokenMiddleware();
             app.UseMvc();
            

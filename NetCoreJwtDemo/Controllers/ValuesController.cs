@@ -15,12 +15,12 @@ namespace NetCoreJwtDemo.Controllers
     {
         private ICache _cache;
 
-        public IAbpSession session { get; set; }
+        private IAbpSession session;
 
-        public ValuesController(ICache cache)
+        public ValuesController(ICache cache, IAbpSession session)
         {
             _cache = cache;
-            session = NullAbpSession.Instance;
+            this.session =session;
         }
         // GET api/values
         [Authorize]

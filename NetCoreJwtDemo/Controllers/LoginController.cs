@@ -10,32 +10,57 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using NetCoreJwtDemo.Cache;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NetCoreJwtDemo.Controllers
 {
     [Route("[controller]")]
-    public class TokenController : Controller
+    public class LoginController : Controller
     {
         private IConfigurationRoot _appConfiguration;
         private ICache _cache;
 
-        public TokenController(IConfigurationRoot configurationRoot,ICache cache)
+        public LoginController(IConfigurationRoot configurationRoot, ICache cache)
         {
             _appConfiguration = configurationRoot;
             _cache = cache;
         }
 
-        [Route("create")]
+        [Route("login")]
         [HttpPost]
-        public IActionResult Create(string username, string password)
+        public IActionResult Login(string username, string password)
         {
-            
+
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                return new ObjectResult(GenerateToken(username));
+                return new ObjectResult(new ResponseData()
+                {
+                    StatusCode = 200,
+                    Msg = "",
+                    Data = new Token()
+                    {
+                        AccessToken = GenerateToken(username),
+                        RefreshToken = ""
+                    }
+                });
             }
-            
+
             return BadRequest();
+        }
+
+        [Route("logout")]
+        [HttpPost]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+            _cache.Remove("UserToken:" + token.Replace("Bearer ", ""));
+            return new ObjectResult(new ResponseData()
+            {
+                StatusCode = 200,
+                Msg = "",
+                Data = null
+            });
         }
 
         private string GenerateToken(string username)
@@ -54,7 +79,7 @@ namespace NetCoreJwtDemo.Controllers
                 expires: now.Add(tokenAuthConfig.Expiration),
                 signingCredentials: tokenAuthConfig.SigningCredentials
             );
-            var token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             _cache.Insert("UserToken:" + token, username, (int)tokenAuthConfig.Expiration.TotalSeconds);
             return token;
         }
