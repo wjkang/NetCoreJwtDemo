@@ -34,7 +34,15 @@ namespace NetCoreJwtDemo.Controllers
                 Data = new UserInfo()
                 {
                     UserId = userId ?? 0,
-                    UserName = "Admin"
+                    UserName = "Admin123",
+                    Roles=new string[]
+                    {
+                        "admin"
+                    },
+                    FunctionCodes=new string[]
+                    {
+                        "function"
+                    }
                 }
             });
 
@@ -43,6 +51,10 @@ namespace NetCoreJwtDemo.Controllers
         {
             public long UserId { get; set; }
             public string UserName { get; set; }
+
+            public  string[] Roles { get; set; }
+
+            public string[] FunctionCodes { get; set; }
         }
     }
 
