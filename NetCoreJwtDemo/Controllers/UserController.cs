@@ -34,14 +34,18 @@ namespace NetCoreJwtDemo.Controllers
                 Data = new UserInfo()
                 {
                     UserId = userId ?? 0,
-                    UserName = "Admin123",
+                    UserName = "Admin345",
                     Roles=new string[]
                     {
                         "admin"
                     },
                     FunctionCodes=new string[]
                     {
-                        "function"
+                        "function",
+                        "role",
+                        "rolepermission",
+                        "roleuser",
+                        "userrole"
                     }
                 }
             });
