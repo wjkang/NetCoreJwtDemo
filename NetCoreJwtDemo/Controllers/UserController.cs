@@ -51,6 +51,36 @@ namespace NetCoreJwtDemo.Controllers
             });
 
         }
+
+        [Authorize]
+        [Route("userlist")]
+        [HttpGet]
+        public IActionResult UserList()
+        {
+            return new ObjectResult(new ResponseData()
+            {
+                StatusCode = 200,
+                Msg = "",
+                Data = new List<UserEntity>()
+                {
+                    new UserEntity()
+                    {
+                        Id=1,
+                        LoginName="test1",
+                        TrueName="张三",
+                        Email="12ewewewe@sina.com"
+                    },
+                    new UserEntity()
+                    {
+                        Id=2,
+                        LoginName="test2",
+                        TrueName="李四",
+                        Email="3434343434@qq.com"
+                    }
+                }
+            });
+        }
+
         private class UserInfo
         {
             public long UserId { get; set; }
@@ -59,6 +89,17 @@ namespace NetCoreJwtDemo.Controllers
             public  string[] Roles { get; set; }
 
             public string[] FunctionCodes { get; set; }
+        }
+
+        public class UserEntity
+        {
+            public long Id { get; set; }
+
+            public string LoginName { get; set; }
+
+            public string TrueName { get; set; }
+
+            public string Email { get; set; }
         }
     }
 

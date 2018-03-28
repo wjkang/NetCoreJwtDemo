@@ -19,7 +19,7 @@ namespace NetCoreJwtDemo.Controllers
             return new ObjectResult(new ResponseData()
             {
                 StatusCode = 200,
-                Msg = "",
+                Msg = "系统错误",
                 Data = new List<Menu>()
                 {
                     new Menu()
@@ -65,8 +65,8 @@ namespace NetCoreJwtDemo.Controllers
                     },
                     new Menu()
                     {
-                        Path="/organization",
-                        Icon="kay",
+                        Path="/permission",
+                        Icon="key",
                         Title="权限管理",
                         Name="权限管理",
                         leftMemu=true,
@@ -92,6 +92,24 @@ namespace NetCoreJwtDemo.Controllers
                                 Icon="settings",
                                 Title="角色权限管理",
                                 Name="rolepermission"
+                            }
+                        }
+                    },
+                    new Menu()
+                    {
+                        Path="/user",
+                        Icon="ios-people",
+                        Title="用户管理",
+                        Name="用户管理",
+                        leftMemu=true,
+                        Children=new List<Menu>()
+                        {
+                            new Menu()
+                            {
+                                Path="index",
+                                Icon="ios-people",
+                                Title="用户管理",
+                                Name="user_index"
                             }
                         }
                     }
